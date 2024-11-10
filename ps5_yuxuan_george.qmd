@@ -8,6 +8,8 @@ format:
        text: |
          \usepackage{fvextra}
          \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,commandchars=\\\{\}}
+         \usepackage{anyfontsize}
+         \fontsize{6pt}{8pt}\selectfont
 include-before-body:
   text: |
     \RecustomVerbatimEnvironment{verbatim}{Verbatim}{
@@ -310,8 +312,8 @@ chart = alt.Chart(monthly_counts).mark_line(point=True).encode(
     tooltip=['YearMonth:T', 'Enforcement_Actions']
 ).properties(
     title="Number of Enforcement Actions Over Time",
-    width=600,
-    height=400
+    width=400,
+    height=300
 ).configure_axis(
     labelAngle=-45
 )
@@ -361,8 +363,8 @@ chart = alt.Chart(combined_df).mark_line(point=True).encode(
     tooltip=['Date:T', 'Count', 'Category']
 ).properties(
     title="Number of Enforcement Actions by Category Over Time",
-    width=600,
-    height=400
+    width=400,
+    height=300
 )
 
 chart.show()
@@ -406,8 +408,8 @@ chart = alt.Chart(topic_counts).mark_line(point=True).encode(
     tooltip=['Date:T', 'Count', 'Topic']
 ).properties(
     title="Number of Enforcement Actions by Topic in 'Criminal and Civil Actions'",
-    width=600,
-    height=400
+    width=400,
+    height=300
 )
 
 chart.show()
@@ -619,7 +621,8 @@ enforcement_data = enforcement_data[enforcement_data['Date'] >= '2021-01-01']
 
 # Extract district names 
 enforcement_data['District'] = enforcement_data['Agency'].apply(extract_district)
-district_actions = enforcement_data.dropna(subset=['District']).groupby('District').size().reset_index(name='Action_Count')
+district_actions = (enforcement_data.dropna(subset=['District'])
+                    .groupby('District').size().reset_index(name='Action_Count'))
 
 # Merge population and action counts
 district_data = district_population.merge(district_actions, left_on='judicial_d', right_on='District', how='left')
